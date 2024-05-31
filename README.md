@@ -19,3 +19,5 @@ Added `updateTempIndex` and `updateDataAddress` methods to separate query from m
 Added getters for fields in `Address` class and use the getters to access the fields inside and outside the class.
 
 ### Applying Two Other Techniques
+
+- Extracted `loadRules`, `initializeParser`, `shiftAction` and `reduceAction` methods in `Parser` class
