@@ -4,6 +4,9 @@
 
 ### Applying Facade Technique
 
+Added 2 Classes `ParserFacade` and `CodeGeneratorFacade` to provide a simplified interface to `Parser` and `CodeGenerator`.
+It helps hiding the complexity below and 3rd-parties just see the facades.
+
 ### Applying State/Strategy Technique or Polymorphism
 
 Used polymorphism in `SymbolType` enum class to specify `varType` related to each symbol type.
