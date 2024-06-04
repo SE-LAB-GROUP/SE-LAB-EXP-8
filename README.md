@@ -52,4 +52,22 @@ Added getters for fields in `Address` class and use the getters to access the fi
 
 #### 4  
 
+1. Long Method -> functions longer than 20-30 lines are Long Methods based on uncle Bob's speeches. In this project we see a lot of functions with more than 30 lines that are separable.
+2. Large Class -> Phase2CodeFileManipulator class is 576 lines that makes it Large Class.
+3. Switching Statements -> switch statement in LexicalAnalyzer could be replaced with Strategy or making a map.
+4. Feature Envy -> We see classes that access a lot of data and methods to other classes.
+5. Dead Code -> In some classes some methods and attributes or even classes themselves are useless that represents dead code.
+6. Speculative Generality -> Some parts of code is created “just in case” to support anticipated future features that never get implemented.
+7. Inappropriate Intimacy -> In ClassStructure we have signs of this bad smells wierd interaction with other classes.
+8. Temporary Field -> In ClassStructure some fields are on some circumstanses null.
+9. Data Class -> ClassNode is just a data class.
+10. Refused Bequest -> ValueType and its children have refusred bequest. 
+
+
 #### 5
+
+The formatter-maven-plugin is a Maven plugin that allows developers to format Java source code using the Eclipse code formatter. 
+The plugin's primary purpose is to automate the process of formatting Java source code to adhere to a consistent code style.
+Consistent code formatting makes the codebase more readable and maintainable. It helps eliminate visual noise and distractions caused by inconsistent indentation, spacing, and other formatting issues. Automated formatting ensures that the entire codebase adheres to the same formatting rules, even as the project evolves and multiple developers contribute.
+The formatter-maven-plugin acts as a tool to simplify and streamline the code reformatting process. It allows developers to define the desired code formatting rules and have them automatically applied to the codebase during the build process. This helps ensure that the codebase maintains a consistent formatting style, which can be especially useful in large, collaborative projects.
+Saves time and effort by automating the tedious task of manually reformatting code. Ensures that the codebase adheres to a predefined set of formatting rules, promoting consistency. Can be integrated into the build pipeline, ensuring that code is properly formatted before being merged or deployed. Supports various configuration options, allowing developers to customize the formatting rules to meet project-specific requirements.
