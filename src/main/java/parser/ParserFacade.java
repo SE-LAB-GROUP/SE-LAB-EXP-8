@@ -2,6 +2,7 @@ package parser;
 
 import Log.Log;
 import codeGenerator.CodeGenerator;
+import codeGenerator.CodeGeneratorFacade;
 import scanner.lexicalAnalyzer;
 import scanner.token.Token;
 import errorHandler.ErrorHandler;
@@ -14,7 +15,7 @@ public class ParserFacade {
     private final Parser parser;
     private ParseTable parseTable;
     private final lexicalAnalyzer lexicalAnalyzer;
-    private final CodeGenerator codeGenerator;
+    private final CodeGeneratorFacade codeGeneratorFacade;
 
     public ParserFacade(java.util.Scanner scanner) {
         this.parser = new Parser();
@@ -24,7 +25,7 @@ public class ParserFacade {
             e.printStackTrace();
         }
         this.lexicalAnalyzer = new lexicalAnalyzer(scanner);
-        this.codeGenerator = new CodeGenerator();
+        this.codeGeneratorFacade = new CodeGeneratorFacade();
     }
 
     public static ParserFacade getInstance(java.util.Scanner scanner) {
@@ -49,7 +50,7 @@ public class ParserFacade {
                         lookAhead = lexicalAnalyzer.getNextToken();
                         break;
                     case reduce:
-                        parser.reduceAction(currentAction, lookAhead, this.parseTable, this.codeGenerator);
+                        parser.reduceAction(currentAction, lookAhead, this.parseTable, this.codeGeneratorFacade);
                         break;
                     case accept:
                         finish = true;
@@ -61,7 +62,7 @@ public class ParserFacade {
         }
 
         if (!ErrorHandler.hasError) {
-            codeGenerator.printMemory();
+            codeGeneratorFacade.printMemory();
         }
     }
 }
