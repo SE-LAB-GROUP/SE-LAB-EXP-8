@@ -21,3 +21,4 @@ Added getters for fields in `Address` class and use the getters to access the fi
 ### Applying Two Other Techniques
 
 - Extracted `loadRules`, `initializeParser`, `shiftAction` and `reduceAction` methods in `Parser` class
+- The parameters `className` and `methodName` were used together multiple times. Added `MethodParameters` class to pass these parameters in `SymbolTable`.

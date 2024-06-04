@@ -3,6 +3,7 @@ package codeGenerator;
 import Log.Log;
 import errorHandler.ErrorHandler;
 import scanner.token.Token;
+import semantic.symbol.MethodParameters;
 import semantic.symbol.Symbol;
 import semantic.symbol.SymbolTable;
 import semantic.symbol.SymbolType;
@@ -141,7 +142,7 @@ public class CodeGenerator {
         String methodName = "main";
         String className = symbolStack.pop();
 
-        symbolTable.addMethod(className, methodName, memory.getCurrentCodeBlockAddress());
+        symbolTable.addMethod(new MethodParameters(className, methodName), memory.getCurrentCodeBlockAddress());
 
         symbolStack.push(className);
         symbolStack.push(methodName);
@@ -163,7 +164,7 @@ public class CodeGenerator {
             String className = symbolStack.pop();
             try {
 
-                Symbol s = symbolTable.get(className, methodName, next.value);
+                Symbol s = symbolTable.get(new MethodParameters(className, methodName), next.value);
                 varType t = s.type.varType;
                 ss.push(new Address(s.address, t));
 
@@ -203,7 +204,7 @@ public class CodeGenerator {
         ss.pop();
         String methodName = symbolStack.pop();
         String className = symbolStack.pop();
-        symbolTable.startCall(className, methodName);
+        symbolTable.startCall(new MethodParameters(className, methodName));
         callStack.push(className);
         callStack.push(methodName);
 
@@ -215,18 +216,18 @@ public class CodeGenerator {
         String methodName = callStack.pop();
         String className = callStack.pop();
         try {
-            symbolTable.getNextParam(className, methodName);
+            symbolTable.getNextParam(new MethodParameters(className, methodName));
             ErrorHandler.printError("The few argument pass for method");
         } catch (IndexOutOfBoundsException e) {
         }
-        SymbolType returnType = symbolTable.getMethodReturnType(className, methodName);
+        SymbolType returnType = symbolTable.getMethodReturnType(new MethodParameters(className, methodName));
         varType t = returnType.varType;
         Address temp = new Address(memory.getTemp(), t);
         memory.updateTempIndex();
         ss.push(temp);
-        memory.add3AddressCode(Operation.ASSIGN, new Address(temp.getNum(), varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodReturnAddress(className, methodName), varType.Address), null);
-        memory.add3AddressCode(Operation.ASSIGN, new Address(memory.getCurrentCodeBlockAddress() + 2, varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodCallerAddress(className, methodName), varType.Address), null);
-        memory.add3AddressCode(Operation.JP, new Address(symbolTable.getMethodAddress(className, methodName), varType.Address), null, null);
+        memory.add3AddressCode(Operation.ASSIGN, new Address(temp.getNum(), varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodReturnAddress(new MethodParameters(className, methodName)), varType.Address), null);
+        memory.add3AddressCode(Operation.ASSIGN, new Address(memory.getCurrentCodeBlockAddress() + 2, varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodCallerAddress(new MethodParameters(className, methodName)), varType.Address), null);
+        memory.add3AddressCode(Operation.JP, new Address(symbolTable.getMethodAddress(new MethodParameters(className, methodName)), varType.Address), null, null);
 
         //symbolStack.pop();
     }
@@ -237,7 +238,7 @@ public class CodeGenerator {
         String methodName = callStack.pop();
 //        String className = symbolStack.pop();
         try {
-            Symbol s = symbolTable.getNextParam(callStack.peek(), methodName);
+            Symbol s = symbolTable.getNextParam(new MethodParameters(callStack.peek(), methodName));
             varType t = s.type.varType;
             Address param = ss.pop();
             if (param.getVarType() != t) {
@@ -391,7 +392,7 @@ public class CodeGenerator {
         String methodName = symbolStack.pop();
         String className = symbolStack.pop();
 
-        symbolTable.addMethod(className, methodName, memory.getCurrentCodeBlockAddress());
+        symbolTable.addMethod(new MethodParameters(className, methodName), memory.getCurrentCodeBlockAddress());
 
         symbolStack.push(className);
         symbolStack.push(methodName);
@@ -418,7 +419,7 @@ public class CodeGenerator {
         String methodName = symbolStack.pop();
         String className = symbolStack.pop();
 
-        symbolTable.addMethodLocalVariable(className, methodName, var);
+        symbolTable.addMethodLocalVariable(new MethodParameters(className, methodName), var);
 
         symbolStack.push(className);
         symbolStack.push(methodName);
@@ -429,13 +430,13 @@ public class CodeGenerator {
 
         String methodName = symbolStack.pop();
         Address s = ss.pop();
-        SymbolType t = symbolTable.getMethodReturnType(symbolStack.peek(), methodName);
+        SymbolType t = symbolTable.getMethodReturnType(new MethodParameters(symbolStack.peek(), methodName));
         varType temp = t.varType;
         if (s.getVarType() != temp) {
             ErrorHandler.printError("The type of method and return address was not match");
         }
-        memory.add3AddressCode(Operation.ASSIGN, s, new Address(symbolTable.getMethodReturnAddress(symbolStack.peek(), methodName), varType.Address, TypeAddress.Indirect), null);
-        memory.add3AddressCode(Operation.JP, new Address(symbolTable.getMethodCallerAddress(symbolStack.peek(), methodName), varType.Address), null, null);
+        memory.add3AddressCode(Operation.ASSIGN, s, new Address(symbolTable.getMethodReturnAddress(new MethodParameters(symbolStack.peek(), methodName)), varType.Address, TypeAddress.Indirect), null);
+        memory.add3AddressCode(Operation.JP, new Address(symbolTable.getMethodCallerAddress(new MethodParameters(symbolStack.peek(), methodName)), varType.Address), null, null);
 
         //symbolStack.pop();
     }
@@ -447,7 +448,7 @@ public class CodeGenerator {
         String methodName = symbolStack.pop();
         String className = symbolStack.pop();
 
-        symbolTable.addMethodParameter(className, methodName, param);
+        symbolTable.addMethodParameter(new MethodParameters(className, methodName), param);
 
         symbolStack.push(className);
         symbolStack.push(methodName);
